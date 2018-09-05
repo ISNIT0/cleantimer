@@ -34,11 +34,11 @@ const alarmSounds: any = {
 
 Object.keys(alarmSounds).forEach(key => {
     const sound = alarmSounds[key];
+    sound.pause();
     sound.addEventListener('ended', function () {
         sound.currentTime = 0;
         sound.play();
     }, false);
-    sound.play();
 });
 
 function stopAllSounds() {
@@ -130,6 +130,10 @@ function makeTimer(state: any, affect: Affect) {
                         const val = Math.max(0, Math.min(ev.target.value, 59));
                         ev.target.value = val;
                         affect.set('hours', val);
+                    },
+                    onchange(ev: any) {
+                        // const el: any = ev.target;
+                        // el.nextSibling.nextSibling.focus();
                     }
                 }),
                 h('div', ':'),
@@ -142,6 +146,10 @@ function makeTimer(state: any, affect: Affect) {
                         const val = Math.max(0, Math.min(ev.target.value, 59));
                         ev.target.value = val;
                         affect.set('minutes', val);
+                    },
+                    onchange(ev: any) {
+                        // const el: any = ev.target;
+                        // el.nextSibling.nextSibling.focus();
                     }
                 }),
                 h('div', ':'),
@@ -154,6 +162,12 @@ function makeTimer(state: any, affect: Affect) {
                         const val = Math.max(0, Math.min(ev.target.value, 59));
                         ev.target.value = val;
                         affect.set('seconds', val);
+                    },
+                    onchange(ev: any) {
+                        // if (showStartButton) {
+                        //     const startButton: any = document.querySelector('button.start');
+                        //     startButton.click();
+                        // }
                     }
                 })
             ]),

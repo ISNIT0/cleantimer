@@ -31,11 +31,11 @@ var alarmSounds = {
 };
 Object.keys(alarmSounds).forEach(function (key) {
     var sound = alarmSounds[key];
+    sound.pause();
     sound.addEventListener('ended', function () {
         sound.currentTime = 0;
         sound.play();
     }, false);
-    sound.play();
 });
 function stopAllSounds() {
     Object.keys(alarmSounds).forEach(function (key) {
@@ -121,6 +121,10 @@ function makeTimer(state, affect) {
                         var val = Math.max(0, Math.min(ev.target.value, 59));
                         ev.target.value = val;
                         affect.set('hours', val);
+                    },
+                    onchange: function (ev) {
+                        // const el: any = ev.target;
+                        // el.nextSibling.nextSibling.focus();
                     }
                 }),
                 nimble_1.h('div', ':'),
@@ -133,6 +137,10 @@ function makeTimer(state, affect) {
                         var val = Math.max(0, Math.min(ev.target.value, 59));
                         ev.target.value = val;
                         affect.set('minutes', val);
+                    },
+                    onchange: function (ev) {
+                        // const el: any = ev.target;
+                        // el.nextSibling.nextSibling.focus();
                     }
                 }),
                 nimble_1.h('div', ':'),
@@ -145,6 +153,12 @@ function makeTimer(state, affect) {
                         var val = Math.max(0, Math.min(ev.target.value, 59));
                         ev.target.value = val;
                         affect.set('seconds', val);
+                    },
+                    onchange: function (ev) {
+                        // if (showStartButton) {
+                        //     const startButton: any = document.querySelector('button.start');
+                        //     startButton.click();
+                        // }
                     }
                 })
             ]),
