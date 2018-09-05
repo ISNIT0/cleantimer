@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Clean Timer</title>
-    <link rel="stylesheet" href="./dist/style.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
 </head>
 
 <body>
@@ -46,9 +44,33 @@
                 animation: octocat-wave 560ms ease-in-out
             }
         }
+
+        body {
+            background: #f2f2f2;
+            font-size: 10vw;
+            color: #757575;
+        }
     </style>
     <div id="frame"></div>
-    <script src="./dist/bundle.js"></script>
+    <script async src="./dist/bundle.js"></script>
+
+    <noscript id="deferred-styles">
+        <link rel="stylesheet" href="./dist/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    </noscript>
+    <script>
+        var loadDeferredStyles = function () {
+            var addStylesNode = document.getElementById("deferred-styles");
+            var replacement = document.createElement("div");
+            replacement.innerHTML = addStylesNode.textContent;
+            document.body.appendChild(replacement)
+            addStylesNode.parentElement.removeChild(addStylesNode);
+        };
+        var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+            window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+        if (raf) raf(function () { window.setTimeout(loadDeferredStyles, 0); });
+        else window.addEventListener('load', loadDeferredStyles);
+    </script>
 </body>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-96198965-2"></script>
