@@ -13,24 +13,58 @@ const affect = makeRenderLoop(target, {
     timerEnd: 0,
     minutes: 0,
     seconds: 0,
-    hours: 0
+    hours: 0,
+    selectedSound: 'beep'
 },
     function (state, affect, changes) {
         const isEditing = !state.timerStart;
         return h('div.app', [
             h(`div.page${isEditing ? '.editing' : ''}`, {}, makeTimer(state, affect)),
-            isEditing ? h('div.footer', [
-                h('button.selected', 'TONE 1'),
-                h('button.selected', 'TONE 2'),
-                h('button.selected', 'TONE 3'),
-                h('button.selected', 'TONE 4')
-            ]) : null
+            isEditing ? makeFooter(state, affect) : null
         ])
     }
 );
 
 
+const alarmSounds: any = {
+    beep: new Audio('./res/beep.mp3'),
+    siren: new Audio('./res/siren.mp3'),
+    bell: new Audio('./res/bell.mp3')
+};
 
+Object.keys(alarmSounds).forEach(key => {
+    const sound = alarmSounds[key];
+    sound.addEventListener('ended', function () {
+        sound.currentTime = 0;
+        sound.play();
+    }, false);
+    sound.play();
+});
+
+function stopAllSounds() {
+    Object.keys(alarmSounds).forEach(key => {
+        const sound = alarmSounds[key];
+        sound.pause();
+        sound.currentTime = 0;
+    });
+}
+
+function makeFooter(state: any, affect: Affect) {
+    return h('div.footer', [
+        h('br'),
+        h('div.row', [
+            h('strong', 'Alarm Sound'),
+        ]),
+        h('div.row', Object.keys(alarmSounds).map(key => {
+            const isSelected = key === state.selectedSound;
+            return h(`button`, {
+                onclick() {
+                    affect.set('selectedSound', key);
+                }
+            }, [isSelected ? h('img', { src: './res/checkbox-checked.svg' }) : h('img', { src: './res/checkbox.svg' }), ' ' + key])
+        }))
+    ]);
+}
 
 function makeTimer(state: any, affect: Affect) {
     if (state.timerStart) {
@@ -41,7 +75,7 @@ function makeTimer(state: any, affect: Affect) {
         const hours = Math.max(Math.floor((t / (1000 * 60 * 60)) % 24), 0);
 
         if (hasEnded) {
-            //alarm.play();
+            alarmSounds[state.selectedSound].play();
         }
 
         const shouldShowHours = (state.timerEnd - state.timerStart) > hourMod;
@@ -66,12 +100,14 @@ function makeTimer(state: any, affect: Affect) {
             }, [
                     h('button', {
                         onclick() {
+                            stopAllSounds();
                             affect.set('timerStart', Date.now());
                             affect.set('timerEnd', moment().add(state.hours, 'hours').add(state.minutes, 'minutes').add(state.seconds, 'seconds'));
                         }
                     }, h('img', { src: './res/reset.svg' })),
                     h('button', {
                         onclick() {
+                            stopAllSounds();
                             affect.set('timerStart', 0);
                             affect.set('timerEnd', 0);
                             affect.set('hours', 0);

@@ -16,19 +16,51 @@ var affect = nimble_1.makeRenderLoop(target, {
     timerEnd: 0,
     minutes: 0,
     seconds: 0,
-    hours: 0
+    hours: 0,
+    selectedSound: 'beep'
 }, function (state, affect, changes) {
     var isEditing = !state.timerStart;
     return nimble_1.h('div.app', [
         nimble_1.h("div.page" + (isEditing ? '.editing' : ''), {}, makeTimer(state, affect)),
-        isEditing ? nimble_1.h('div.footer', [
-            nimble_1.h('button.selected', 'TONE 1'),
-            nimble_1.h('button.selected', 'TONE 2'),
-            nimble_1.h('button.selected', 'TONE 3'),
-            nimble_1.h('button.selected', 'TONE 4')
-        ]) : null
+        isEditing ? makeFooter(state, affect) : null
     ]);
 });
+var alarmSounds = {
+    beep: new Audio('./res/beep.mp3'),
+    siren: new Audio('./res/siren.mp3'),
+    bell: new Audio('./res/bell.mp3')
+};
+Object.keys(alarmSounds).forEach(function (key) {
+    var sound = alarmSounds[key];
+    sound.addEventListener('ended', function () {
+        sound.currentTime = 0;
+        sound.play();
+    }, false);
+    sound.play();
+});
+function stopAllSounds() {
+    Object.keys(alarmSounds).forEach(function (key) {
+        var sound = alarmSounds[key];
+        sound.pause();
+        sound.currentTime = 0;
+    });
+}
+function makeFooter(state, affect) {
+    return nimble_1.h('div.footer', [
+        nimble_1.h('br'),
+        nimble_1.h('div.row', [
+            nimble_1.h('strong', 'Alarm Sound'),
+        ]),
+        nimble_1.h('div.row', Object.keys(alarmSounds).map(function (key) {
+            var isSelected = key === state.selectedSound;
+            return nimble_1.h("button", {
+                onclick: function () {
+                    affect.set('selectedSound', key);
+                }
+            }, [isSelected ? nimble_1.h('img', { src: './res/checkbox-checked.svg' }) : nimble_1.h('img', { src: './res/checkbox.svg' }), ' ' + key]);
+        }))
+    ]);
+}
 function makeTimer(state, affect) {
     if (state.timerStart) {
         var hasEnded = state.timerEnd < state.time;
@@ -37,7 +69,7 @@ function makeTimer(state, affect) {
         var minutes = Math.max(Math.floor((t / 1000 / 60) % 60), 0);
         var hours = Math.max(Math.floor((t / (1000 * 60 * 60)) % 24), 0);
         if (hasEnded) {
-            //alarm.play();
+            alarmSounds[state.selectedSound].play();
         }
         var shouldShowHours = (state.timerEnd - state.timerStart) > hourMod;
         return [
@@ -59,12 +91,14 @@ function makeTimer(state, affect) {
             }, [
                 nimble_1.h('button', {
                     onclick: function () {
+                        stopAllSounds();
                         affect.set('timerStart', Date.now());
                         affect.set('timerEnd', moment_1.default().add(state.hours, 'hours').add(state.minutes, 'minutes').add(state.seconds, 'seconds'));
                     }
                 }, nimble_1.h('img', { src: './res/reset.svg' })),
                 nimble_1.h('button', {
                     onclick: function () {
+                        stopAllSounds();
                         affect.set('timerStart', 0);
                         affect.set('timerEnd', 0);
                         affect.set('hours', 0);

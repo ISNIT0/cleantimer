@@ -74,8 +74,9 @@ button {
 }
 button img {
   height: 4vw;
-  display: block;
+  display: inline-block;
   margin: auto;
+  vertical-align: middle;
 }
 button:hover {
   opacity: 0.8;
@@ -96,7 +97,9 @@ button:hover {
 }
 .footer {
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   padding: 0.5vw;
   background: #fff;
+  font-size: 4vw;
 }
