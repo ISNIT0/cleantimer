@@ -1,0 +1,102 @@
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+* {
+  transition: 0.3s;
+}
+body,
+#frame {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 15vw;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+.app {
+  width: 100%;
+  height: 100%;
+}
+.page {
+  width: 100%;
+  height: 100%;
+  background: #f2f2f2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+body,
+input {
+  color: #333;
+  font-family: 'Roboto Mono', monospace;
+  text-align: center;
+  outline: none;
+}
+.editing {
+  font-size: 10vw;
+  color: #757575;
+}
+.editing .row {
+  display: flex;
+  justify-content: center;
+}
+.editing input {
+  border: none;
+  border-radius: 10%;
+  background: none;
+  display: inline-block;
+  background: #fff;
+  font-weight: bold;
+  width: 15vw;
+  height: 15vw;
+  font-size: 10vw;
+}
+button {
+  cursor: pointer;
+  border: none;
+  margin: 4vw;
+  font-family: 'Roboto Mono', monospace;
+  padding: 2vw;
+  background: #333;
+  color: #f2f2f2;
+  font-size: 3vw;
+  border-radius: 10px;
+  min-width: 15vw;
+}
+button img {
+  height: 4vw;
+  display: block;
+  margin: auto;
+}
+button:hover {
+  opacity: 0.8;
+}
+.flash {
+  animation: 1.5s linear 0s flash infinite;
+}
+@keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.footer {
+  display: flex;
+  justify-content: space-around;
+  padding: 0.5vw;
+  background: #fff;
+}
