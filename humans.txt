@@ -1,0 +1,11 @@
+/* TEAM */            
+Your title: Joseph Reeve
+Site: contact@simmsreeve.com
+Twitter: @jreeve0
+Location: London, UK
+                            
+/* SITE */    
+Last update: YYYY/MM/DD                   
+Standards: HTML5, CSS3, TypeScript, ES6    
+Components: MomentJS, NimbleJS   
+Software: Visual Studio Code, TypeScript
