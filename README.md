@@ -2,6 +2,8 @@
 
 [CleanTimer.io](https://cleantimer.io) - A Clean and Simple Timer App
 
+[![CodeFactor](https://www.codefactor.io/repository/github/isnit0/cleantimer/badge)](https://www.codefactor.io/repository/github/isnit0/cleantimer)
+
 ![Screenshot](./screenshot.png)
 
 ## Requirements
