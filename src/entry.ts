@@ -2,6 +2,7 @@ import moment from 'moment';
 import { h, makeRenderLoop } from 'nimble';
 
 const target = <HTMLElement>document.getElementById('frame');
+const socialFooterEl = <HTMLElement>document.getElementsByClassName('social-footer')[0];
 
 const secondMod = 1000;
 const minuteMod = secondMod * 60;
@@ -20,7 +21,8 @@ const affect = makeRenderLoop(target, {
         const isEditing = !state.timerStart;
         return h('div.app', [
             h(`div.page${isEditing ? '.editing' : ''}`, {}, makeTimer(state, affect)),
-            isEditing ? makeFooter(state, affect) : null
+            isEditing ? makeFooter(state, affect) : null,
+            makeSocialFooter(),
         ])
     }
 );
@@ -66,6 +68,28 @@ function makeFooter(state: any, affect: Affect) {
     ]);
 }
 
+
+function makeSocialFooter() {
+    return h('div', {
+        key: 'social-footer',
+        style: {
+            width: '100%'
+        },
+        oncreate(el: HTMLDivElement) {
+            const visibleFooter = socialFooterEl.cloneNode(true) as HTMLElement;
+            visibleFooter.classList.remove('hidden');
+            el.appendChild(visibleFooter);
+        },
+        onupdate(el: HTMLDivElement) {
+            if (!el.children.length) {
+                // const visibleFooter = socialFooterEl.cloneNode(true) as HTMLElement;
+                // visibleFooter.classList.remove('hidden');
+                // el.appendChild(visibleFooter);
+            }
+        }
+    });
+}
+
 function makeTimer(state: any, affect: Affect) {
     if (state.timerStart) {
         const hasEnded = state.timerEnd < state.time;
@@ -92,7 +116,8 @@ function makeTimer(state: any, affect: Affect) {
             h('div.row', {
                 style: hasEnded ? {
                     opacity: 0.5,
-                    'max-height': '300px'
+                    'max-height': '300px',
+                    'margin-top': '-8vw'
                 } : {
                         opacity: 0,
                         'max-height': 0
@@ -171,17 +196,22 @@ function makeTimer(state: any, affect: Affect) {
                     }
                 })
             ]),
-            h('div.row', [
-                h('button.start', {
-                    onclick() {
-                        affect.set('timerStart', Date.now());
-                        affect.set('timerEnd', moment().add(state.hours, 'hours').add(state.minutes, 'minutes').add(state.seconds, 'seconds'));
-                    },
-                    style: {
-                        visibility: showStartButton ? 'visible' : 'hidden'
-                    }
-                }, 'START')
-            ])
+            h('div.row', {
+                style: {
+                    'max-height': showStartButton ? '25%' : '0',
+                    'overflow': 'hidden'
+                }
+            }, [
+                    h('button.start', {
+                        onclick() {
+                            affect.set('timerStart', Date.now());
+                            affect.set('timerEnd', moment().add(state.hours, 'hours').add(state.minutes, 'minutes').add(state.seconds, 'seconds'));
+                        },
+                        style: {
+                            visibility: showStartButton ? 'visible' : 'hidden'
+                        }
+                    }, 'START')
+                ])
         ];
     }
 }

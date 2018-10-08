@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var moment_1 = __importDefault(require("moment"));
 var nimble_1 = require("nimble");
 var target = document.getElementById('frame');
+var socialFooterEl = document.getElementsByClassName('social-footer')[0];
 var secondMod = 1000;
 var minuteMod = secondMod * 60;
 var hourMod = minuteMod * 60;
@@ -21,7 +22,8 @@ var affect = nimble_1.makeRenderLoop(target, {
     var isEditing = !state.timerStart;
     return nimble_1.h('div.app', [
         nimble_1.h("div.page" + (isEditing ? '.editing' : ''), {}, makeTimer(state, affect)),
-        isEditing ? makeFooter(state, affect) : null
+        isEditing ? makeFooter(state, affect) : null,
+        makeSocialFooter(),
     ]);
 });
 var alarmSounds = {
@@ -60,6 +62,26 @@ function makeFooter(state, affect) {
         }))
     ]);
 }
+function makeSocialFooter() {
+    return nimble_1.h('div', {
+        key: 'social-footer',
+        style: {
+            width: '100%'
+        },
+        oncreate: function (el) {
+            var visibleFooter = socialFooterEl.cloneNode(true);
+            visibleFooter.classList.remove('hidden');
+            el.appendChild(visibleFooter);
+        },
+        onupdate: function (el) {
+            if (!el.children.length) {
+                // const visibleFooter = socialFooterEl.cloneNode(true) as HTMLElement;
+                // visibleFooter.classList.remove('hidden');
+                // el.appendChild(visibleFooter);
+            }
+        }
+    });
+}
 function makeTimer(state, affect) {
     if (state.timerStart) {
         var hasEnded = state.timerEnd < state.time;
@@ -82,7 +104,8 @@ function makeTimer(state, affect) {
             nimble_1.h('div.row', {
                 style: hasEnded ? {
                     opacity: 0.5,
-                    'max-height': '300px'
+                    'max-height': '300px',
+                    'margin-top': '-8vw'
                 } : {
                     opacity: 0,
                     'max-height': 0
@@ -162,7 +185,12 @@ function makeTimer(state, affect) {
                     }
                 })
             ]),
-            nimble_1.h('div.row', [
+            nimble_1.h('div.row', {
+                style: {
+                    'max-height': showStartButton ? '25%' : '0',
+                    'overflow': 'hidden'
+                }
+            }, [
                 nimble_1.h('button.start', {
                     onclick: function () {
                         affect.set('timerStart', Date.now());
