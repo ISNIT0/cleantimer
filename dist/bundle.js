@@ -67,21 +67,17 @@ function makeSocialFooter() {
     return nimble_1.h('div', {
         key: 'social-footer',
         style: {
-            width: '100%'
-        },
-        oncreate: function (el) {
-            var visibleFooter = socialFooterEl.cloneNode(true);
-            visibleFooter.classList.remove('hidden');
-            el.appendChild(visibleFooter);
-        },
-        onupdate: function (el) {
-            if (!el.children.length) {
-                // const visibleFooter = socialFooterEl.cloneNode(true) as HTMLElement;
-                // visibleFooter.classList.remove('hidden');
-                // el.appendChild(visibleFooter);
-            }
+            width: '100%',
+            'margin-bottom': '5vw'
         }
-    });
+    }, [
+        nimble_1.h('a.button', {
+            href: 'https://twitter.com/intent/tweet?url=https%3A%2F%2Fcleantimer.io%2F&text=Loving%20this%20simple%2C%20good%20looking%20timer%20app!%20via%20%40JReeve0',
+        }, 'Tweet'),
+        nimble_1.h('a.button', {
+            href: 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcleantimer.io%2F',
+        }, 'Facebook')
+    ]);
 }
 function makeTimer(state, affect) {
     if (state.timerStart) {

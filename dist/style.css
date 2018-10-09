@@ -66,7 +66,8 @@ input {
   height: 15vw;
   font-size: 10vw;
 }
-button {
+button,
+.button {
   cursor: pointer;
   border: none;
   margin: 4vw;
@@ -78,13 +79,15 @@ button {
   border-radius: 10px;
   min-width: 15vw;
 }
-button img {
+button img,
+.button img {
   height: 4vw;
   display: inline-block;
   margin: auto;
   vertical-align: middle;
 }
-button:hover {
+button:hover,
+.button:hover {
   opacity: 0.8;
 }
 .flash {
