@@ -15,7 +15,7 @@ const affect = makeRenderLoop(target, {
     minutes: 0,
     seconds: 0,
     hours: 0,
-    selectedSound: 'beep'
+    selectedSound: 'ping'
 },
     function (state, affect, changes) {
         const isEditing = !state.timerStart;
@@ -29,25 +29,31 @@ const affect = makeRenderLoop(target, {
 
 
 const alarmSounds: any = {
-    beep: new Audio('./res/beep.mp3'),
-    siren: new Audio('./res/siren.mp3'),
-    bell: new Audio('./res/bell.mp3')
+    beep: { repeat: true, sound: new Audio('./res/beep.mp3') },
+    ping: { repeat: false, sound: new Audio('./res/ping.mp3') },
+    silent: null
 };
 
 Object.keys(alarmSounds).forEach(key => {
     const sound = alarmSounds[key];
-    sound.pause();
-    sound.addEventListener('ended', function () {
-        sound.currentTime = 0;
-        sound.play();
-    }, false);
+    if (sound) {
+        sound.sound.pause();
+        sound.sound.addEventListener('ended', function () {
+            sound.sound.currentTime = 0;
+            if (sound.repeat) {
+                sound.sound.play();
+            }
+        }, false);
+    }
 });
 
 function stopAllSounds() {
     Object.keys(alarmSounds).forEach(key => {
         const sound = alarmSounds[key];
-        sound.pause();
-        sound.currentTime = 0;
+        if (sound) {
+            sound.sound.pause();
+            sound.sound.currentTime = 0;
+        }
     });
 }
 
@@ -95,7 +101,7 @@ function makeTimer(state: any, affect: Affect) {
         const hours = Math.max(Math.floor((t / (1000 * 60 * 60)) % 24), 0);
 
         if (hasEnded) {
-            alarmSounds[state.selectedSound].play();
+            alarmSounds[state.selectedSound] && alarmSounds[state.selectedSound].sound.play();
         }
 
         const shouldShowHours = (state.timerEnd - state.timerStart) > hourMod;

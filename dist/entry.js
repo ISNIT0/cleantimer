@@ -17,7 +17,7 @@ var affect = nimble_1.makeRenderLoop(target, {
     minutes: 0,
     seconds: 0,
     hours: 0,
-    selectedSound: 'beep'
+    selectedSound: 'ping'
 }, function (state, affect, changes) {
     var isEditing = !state.timerStart;
     return nimble_1.h('div.app', [
@@ -27,23 +27,29 @@ var affect = nimble_1.makeRenderLoop(target, {
     ]);
 });
 var alarmSounds = {
-    beep: new Audio('./res/beep.mp3'),
-    siren: new Audio('./res/siren.mp3'),
-    bell: new Audio('./res/bell.mp3')
+    beep: { repeat: true, sound: new Audio('./res/beep.mp3') },
+    ping: { repeat: false, sound: new Audio('./res/ping.mp3') },
+    silent: null
 };
 Object.keys(alarmSounds).forEach(function (key) {
     var sound = alarmSounds[key];
-    sound.pause();
-    sound.addEventListener('ended', function () {
-        sound.currentTime = 0;
-        sound.play();
-    }, false);
+    if (sound) {
+        sound.sound.pause();
+        sound.sound.addEventListener('ended', function () {
+            sound.sound.currentTime = 0;
+            if (sound.repeat) {
+                sound.sound.play();
+            }
+        }, false);
+    }
 });
 function stopAllSounds() {
     Object.keys(alarmSounds).forEach(function (key) {
         var sound = alarmSounds[key];
-        sound.pause();
-        sound.currentTime = 0;
+        if (sound) {
+            sound.sound.pause();
+            sound.sound.currentTime = 0;
+        }
     });
 }
 function makeFooter(state, affect) {
@@ -86,7 +92,7 @@ function makeTimer(state, affect) {
         var minutes = Math.max(Math.floor((t / 1000 / 60) % 60), 0);
         var hours = Math.max(Math.floor((t / (1000 * 60 * 60)) % 24), 0);
         if (hasEnded) {
-            alarmSounds[state.selectedSound].play();
+            alarmSounds[state.selectedSound] && alarmSounds[state.selectedSound].sound.play();
         }
         var shouldShowHours = (state.timerEnd - state.timerStart) > hourMod;
         return [
