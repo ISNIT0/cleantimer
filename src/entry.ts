@@ -84,7 +84,7 @@ function makeSocialFooter() {
         }
     }, [
             h('a.button', {
-                href: 'https://twitter.com/intent/tweet?url=https%3A%2F%2Fcleantimer.io%2F&text=Loving%20this%20simple%2C%20good%20looking%20timer%20app!%20via%20%40JReeve0',
+                href: 'https://twitter.com/intent/tweet?url=https%3A%2F%2Fcleantimer.io%2F&text=Loving%20this%20simple%2C%20good%20looking%20timer%20app!%20via%20%40ISNIT0',
             }, 'Tweet'),
             h('a.button', {
                 href: 'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcleantimer.io%2F',
