@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "browserify": "^17.0.0",
+    "less": "^4.2.0",
     "moment": "^2.22.2",
-    "nimble": "git+https://github.com/ISNIT0/nimble-js.git"
+    "nimble": "git+https://github.com/ISNIT0/nimble-js.git",
+    "typescript": "^5.5.4"
   }
 }
